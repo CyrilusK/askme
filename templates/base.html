@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" data-bs-theme="auto">
+<head>
+    <script src="../static/js/color-modes.js"></script>
+    <title>Base</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sticky-footer-navbar/">
+    <link href="../static/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="../static/css/additional.css" rel="stylesheet">
+    <link href="../static/css/my.css" rel="stylesheet">
+
+</head>
+<body class="d-flex flex-column h-100">
+
+
+<header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid" style="height: 85px">
+            <a style="width: 20%; justify-content: center; display: flex;" class="navbar-brand" href="#"><h1>Askme</h1>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarCollapse" style="height: 100%">
+                <form class="d-flex" role="search" style="width: 90%; height: 50%">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                           style="width: 80%; font-size: 20px">
+                    <button class="btn btn-outline-success" type="submit" style="width: 20%">Ask</button>
+                </form>
+            </div>
+            <div id="info-user">
+                <img id="avatar-info-user" src="../static/img/user1.jpeg" alt="avatar">
+                <div class="navbar-brand">
+                    Mr. Kardash
+                </div>
+                <div class="navbar-brand">
+                    <a href="#">settings</a><a href="#">log out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container" style="max-width: 90%; margin-right: 0; margin-left:10%">
+        <div style="margin-top: 75px; margin-bottom: 20px">
+            <h1 class="mt-5" style="display: inline; margin-right: 30px">New questions</h1>
+            <h3 style="display: inline;"><a href="#">Hot questions</a></h3>
+        </div>
+        <div class="row">
+
+            <!--Questions-->
+            <div class="col-9">
+                <div class="question">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="question-avatar">
+                                <img src="../static/img/user1.jpeg" alt="avatar">
+                            </div>
+                            <div class="div-like">
+                                <button><img src="../static/img/arrow.png" style="width: 10px; height: 10px;" alt="">
+                                </button>
+                                <button class="button-like"><img src="../static/img/like.svg"></button>
+                                <span>6</span>
+                                <button><img src="../static/img/arrow.png"
+                                             style="width: 10px; height: 10px; rotate: 180deg;" alt="">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <h2><a href="#">Question</a></h2>
+                            <div class="question-text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Fringilla est ullamcorper eget nulla.
+                                Habitasse platea dictumst quisque sagittis purus sit amet volutpat.
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <a href="#">Answer (6)</a>
+                                </div>
+                                <div class="col-8">
+                                    Tags:
+                                    <span class="badge bg-warning">perl</span>
+                                    <span class="badge bg-info">C++</span>
+                                    <span class="badge bg-primary">Python</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="question-avatar">
+                                <img src="../static/img/user2.jpeg" alt="avatar">
+                            </div>
+                            <div class="div-like">
+                                <button><img src="../static/img/arrow.png" style="width: 10px; height: 10px;" alt="">
+                                </button>
+                                <button class="button-like"><img src="../static/img/like.svg"></button>
+                                <span>10</span>
+                                <button><img src="../static/img/arrow.png"
+                                             style="width: 10px; height: 10px; rotate: 180deg;" alt="">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <h2><a href="#">Question2</a></h2>
+                            <div class="question-text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Fringilla est ullamcorper eget nulla.
+                                Habitasse platea dictumst quisque sagittis purus sit amet volutpat.
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <a href="#">Answer (1)</a>
+                                </div>
+                                <div class="col-8">
+                                    Tags:
+                                    <span class="badge bg-secondary">CSS</span>
+                                    <span class="badge bg-dark">VK</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="question-avatar">
+                                <img src="../static/img/user3.png" alt="avatar">
+                            </div>
+                            <div class="div-like">
+                                <button><img src="../static/img/arrow.png"
+                                             style="width: 10px; height: 10px; border: none" alt=""></button>
+                                <button class="button-like"><img src="../static/img/like.svg"></button>
+                                <span>-10</span>
+                                <button><img src="../static/img/arrow.png"
+                                             style="width: 10px; height: 10px; rotate: 180deg; " alt="">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <h2><a href="#">Question3</a></h2>
+                            <div class="question-text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Fringilla est ullamcorper eget nulla.
+                                Habitasse platea dictumst quisque sagittis purus sit amet volutpat.
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <a href="#">Answer (10)</a>
+                                </div>
+                                <div class="col-8">
+                                    Tags:
+                                    <span class="badge bg-primary">Python</span>
+                                    <span class="badge bg-success">SQL</span>
+                                    <span class="badge bg-danger">Django</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tags-->
+            <div class="col-3">
+                <h3 style="justify-content: center; display: flex">Popular tags</h3>
+                <div class="tags-question">
+                    <span class="badge bg-primary">Python</span>
+                    <span class="badge bg-secondary">CSS</span>
+                    <span class="badge bg-success">SQL</span>
+                    <span class="badge bg-danger">Django</span>
+                    <span class="badge bg-dark">VK</span>
+                    <span class="badge bg-warning">perl</span>
+                    <span class="badge bg-info">C++</span>
+                </div>
+                <h3 style="justify-content: center; display: flex; margin-top: 20px">Best members</h3>
+                <a class="members" href="#">Mr. Freeman</a>
+                <a class="members" href="#">Dr. House</a>
+                <a class="members" href="#">Bender</a>
+                <a class="members" href="#">Queen Victoria</a>
+                <a class="members" href="#">V. Pupkin</a>
+            </div>
+        </div>
+
+
+        <!--    Paginator-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+</main>
+
+
+<script src="../static/js/bootstrap.bundle.js" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
