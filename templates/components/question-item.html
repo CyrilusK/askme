@@ -1,0 +1,37 @@
+{% load static %}
+
+<div class="question">
+    <div class="row">
+        <div class="col-3">
+            <div class="question-avatar">
+                <img src="{% static 'img/user1.jpeg' %}" alt="avatar">
+            </div>
+            <div class="div-like">
+                <button><img src="{% static 'img/arrow.png' %}" style="width: 10px; height: 10px;" alt="">
+                </button>
+                <button class="button-like"><img src="../static/img/like.svg"></button>
+                <span>6</span>
+                <button><img src="../static/img/arrow.png"
+                             style="width: 10px; height: 10px; rotate: 180deg;" alt="">
+                </button>
+            </div>
+        </div>
+        <div class="col-8">
+            <h2><a href="/question/{{question.id}}">{{ question.title }}</a></h2>
+            <div class="question-text">
+                {{ question.content }}
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <a href="#">Answer (6)</a>
+                </div>
+                <div class="col-8">
+                    Tags:
+                    <span class="badge bg-warning">perl</span>
+                    <span class="badge bg-info">C++</span>
+                    <span class="badge bg-primary">Python</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
