@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" class="h-100" data-bs-theme="auto">
@@ -16,24 +17,21 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid" style="height: 85px">
-            <a style="width: 20%; justify-content: center; display: flex;" class="navbar-brand" href="#"><h1>Askme</h1>
-            </a>
+            <a style="width: 20%; justify-content: center; display: flex;" class="navbar-brand"
+               href="{% url 'index' %}"><h1>Askme</h1></a>
             <div class="collapse navbar-collapse" id="navbarCollapse" style="height: 100%">
                 <form class="d-flex" role="search" style="width: 90%; height: 50%">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
                            style="width: 80%; font-size: 20px">
-                    <button class="btn btn-outline-success" type="submit" style="width: 20%">Ask</button>
+                    <button class="btn btn-outline-success" type="submit" style="width: 20%">Search</button>
                 </form>
             </div>
             <div id="info-user">
-                <img id="avatar-info-user" src="{% static '/img/user1.jpeg' %}" alt="avatar">
-                <div class="navbar-brand">
-                    Mr. Kardash
-                </div>
-                <div class="navbar-brand">
-                    <a href="#">settings</a><a href="#">log out</a>
-                </div>
+                {% block info-user %} {% endblock %}
             </div>
+            <a href="{% url 'ask' %}">
+                <button class="btn btn-outline-success" style="margin-right: 50px">Ask</button>
+            </a>
         </div>
     </nav>
 </header>
@@ -58,23 +56,11 @@
                     {% for tag in tags %}
                         <a href="{% url 'tag' tag %}">{{ tag }}</a>
                     {% endfor %}
-                    <span class="badge bg-primary">Python</span>
-                    <span class="badge bg-secondary">CSS</span>
-                    <span class="badge bg-success">SQL</span>
-                    <span class="badge bg-danger">Django</span>
-                    <span class="badge bg-dark">VK</span>
-                    <span class="badge bg-warning">perl</span>
-                    <span class="badge bg-info">C++</span>
                 </div>
                 <h3 style="justify-content: center; display: flex; margin-top: 20px">Best members</h3>
-                {% for member in best_members %}
+                {% for member in members %}
                     <a class="members" href="#">{{ member }}</a>
                 {% endfor %}
-                <a class="members" href="#">Mr. Freeman</a>
-                <a class="members" href="#">Dr. House</a>
-                <a class="members" href="#">Bender</a>
-                <a class="members" href="#">Queen Victoria</a>
-                <a class="members" href="#">V. Pupkin</a>
             </div>
         </div>
     </div>

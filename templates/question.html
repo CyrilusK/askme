@@ -1,17 +1,30 @@
+
 {% extends 'layouts/base.html' %}
 {% load static %}
-{% block content %}
 
+{% block info-user %}
+    {% if user_data %}
+        {% include "layouts/is_authorized_user.html" %}
+    {% else %}
+        {% include "layouts/not_authorized_user.html" %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
     <!--Question-->
     <div class="question" style="border: 2px; height: auto">
         <div class="row">
             <div class="col-3">
                 <div class="question-avatar">
-                    <img src="../static/img/user1.jpeg" alt="avatar">
+                    <img src="{% static question.author.avatar %}" alt="avatar">
                 </div>
                 <div class="div-like">
-                    <button class="button-like"><img src="../static/img/like.svg"></button>
-                    <span>5</span>
+                    <button><img src="{% static '/img/arrow.png' %}" style="width: 10px; height: 10px;" alt=""></button>
+                    <button class="button-like"><img src="{% static 'img/like.svg' %}"></button>
+                    <span>{{ question.num_likes }}</span>
+                    <button><img src="{% static '/img/arrow.png' %}"
+                                 style="width: 10px; height: 10px; rotate: 180deg;" alt="">
+                    </button>
                 </div>
             </div>
             <div class="col-8">
@@ -19,11 +32,9 @@
                 <div class="question-text">
                     {{ question.text }}
                 </div>
-                <div>
+                <div style="margin-top: 15px">
                     Tags:
-                    <span class="badge bg-warning">perl</span>
-                    <span class="badge bg-info">C++</span>
-                    <span class="badge bg-primary">Python</span>
+                    {% for tag in question.tags %} <a href="{% url 'tag' tag %}">{{ tag }}</a> {% endfor %}
                 </div>
             </div>
         </div>
@@ -32,98 +43,21 @@
     <hr class="my-4">
 
     <!--Answers -->
-    <div class="answer">
-        <div class="row">
-            <div class="col-3">
-                <div class="question-avatar">
-                    <img src="../static/img/user2.jpeg" alt="avatar">
-                </div>
-                <div class="div-like">
-                    <button><img src="../static/img/arrow.png" style="width: 10px; height: 10px;" alt="">
-                    </button>
-                    <button class="button-like"><img src="../static/img/like.svg"></button>
-                    <span>10</span>
-                    <button><img src="../static/img/arrow.png"
-                                 style="width: 10px; height: 10px; rotate: 180deg;" alt="">
-                    </button>
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="answer-text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Fringilla est ullamcorper eget nulla.
-                    Habitasse platea dictumst quisque sagittis purus sit amet volutpat.
-                </div>
-                <div class="row">
-                    <p><input class="correct" type="checkbox" name="correct" value="true">Correct</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% if answers %}
+        {% for answer in answers %}
+            {% include "layouts/answer_item.html" %}
+        {% endfor %}
+    {% else %}
+        <p>No answers yet.</p>
+    {% endif %}
 
-    <div class="answer">
-        <div class="row">
-            <div class="col-3">
-                <div class="question-avatar">
-                    <img src="../static/img/user2.jpeg" alt="avatar">
-                </div>
-                <div class="div-like">
-                    <button><img src="../static/img/arrow.png" style="width: 10px; height: 10px;" alt="">
-                    </button>
-                    <button class="button-like"><img src="../static/img/like.svg"></button>
-                    <span>5</span>
-                    <button><img src="../static/img/arrow.png"
-                                 style="width: 10px; height: 10px; rotate: 180deg;" alt="">
-                    </button>
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="answer-text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Fringilla est ullamcorper eget nulla.
-                    Habitasse platea dictumst quisque sagittis purus sit amet volutpat.
-                </div>
-                <div class="row">
-                    <p><input class="correct" type="checkbox" name="correct" value="true">Correct</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="answer">
-        <div class="row">
-            <div class="col-3">
-                <div class="question-avatar">
-                    <img src="../static/img/user3.png" alt="avatar">
-                </div>
-                <div class="div-like">
-                    <button><img src="../static/img/arrow.png" style="width: 10px; height: 10px;" alt="">
-                    </button>
-                    <button class="button-like"><img src="../static/img/like.svg"></button>
-                    <span>2</span>
-                    <button><img src="../static/img/arrow.png"
-                                 style="width: 10px; height: 10px; rotate: 180deg;" alt="">
-                    </button>
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="answer-text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Fringilla est ullamcorper eget nulla.
-                    Habitasse platea dictumst quisque sagittis purus sit amet volutpat.
-                </div>
-                <div class="row">
-                    <p><input class="correct" type="checkbox" name="correct" value="true">Correct</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- add answer-->
     <hr class="my-4">
-    <form method="post" action="#" style="margin-bottom: 10px">
-                    <textarea class="form-control me-2 question-text" type="search" rows="8" name="answer"
+    <form method="post" action="#" style="margin-bottom: 10px" name="question">
+        <textarea class="form-control me-2 question-text" type="search" rows="8" name="answer"
                               style="resize: none; width: 100%" placeholder="Enter your answer here..."></textarea>
         <button class="btn btn-outline-success" type="submit">Answer</button>
     </form>
 {% endblock %}
+

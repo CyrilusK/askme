@@ -1,0 +1,31 @@
+
+{% load static %}
+
+<div class="answer" style="height: auto">
+    <div class="row">
+        <div class="col-3">
+            <div class="question-avatar">
+                <img src="{% static answer.author.avatar %}" alt="avatar">
+            </div>
+            <div class="div-like">
+                <button><img src="{% static '/img/arrow.png' %}" style="width: 10px; height: 10px;" alt=""></button>
+                <button class="button-like"><img src="{% static 'img/like.svg' %}"></button>
+                <span>{{ answer.num_likes }}</span>
+                <button><img src="{% static '/img/arrow.png' %}"
+                             style="width: 10px; height: 10px; rotate: 180deg;" alt="">
+                </button>
+            </div>
+        </div>
+        <div class="col-8">
+            <div style="min-height: 140px">
+                 {{ answer.text }}
+            </div>
+            <div class="row">
+                <label>
+                    <input class="correct" type="checkbox" name="correct" value="true" {% if answer.correct %} checked {% endif %}>
+                    Correct
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

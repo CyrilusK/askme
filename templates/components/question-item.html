@@ -4,32 +4,30 @@
     <div class="row">
         <div class="col-3">
             <div class="question-avatar">
-                <img src="{% static 'img/user1.jpeg' %}" alt="avatar">
+                <img src="{% static question.author.avatar %}" alt="avatar">
             </div>
             <div class="div-like">
                 <button><img src="{% static 'img/arrow.png' %}" style="width: 10px; height: 10px;" alt="">
                 </button>
-                <button class="button-like"><img src="../static/img/like.svg"></button>
-                <span>6</span>
-                <button><img src="../static/img/arrow.png"
+                <button class="button-like"><img src="{% static 'img/like.svg' %}"></button>
+                <span>{{ question.num_likes }}</span>
+                <button><img src="{% static 'img/arrow.png' %}"
                              style="width: 10px; height: 10px; rotate: 180deg;" alt="">
                 </button>
             </div>
         </div>
         <div class="col-8">
-            <h2><a href="/question/{{question.id}}">{{ question.title }}</a></h2>
+            <h2><a href="{% url 'question' question.id %}">{{ question.title }}</a></h2>
             <div class="question-text">
-                {{ question.content }}
+                {{ question.text }}
             </div>
             <div class="row">
                 <div class="col-4">
-                    <a href="#">Answer (6)</a>
+                     <a href="{% url 'question' question.id %}">Answer ({{ question.num_answers }})</a>
                 </div>
                 <div class="col-8">
                     Tags:
-                    <span class="badge bg-warning">perl</span>
-                    <span class="badge bg-info">C++</span>
-                    <span class="badge bg-primary">Python</span>
+                    {% for tag in question.tags %} <a href = "{% url 'tag' tag %}">{{ tag }}</a> {% endfor %}
                 </div>
             </div>
         </div>
