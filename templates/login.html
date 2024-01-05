@@ -1,112 +1,44 @@
-<!DOCTYPE html>
-<html lang="en" class="h-100" data-bs-theme="auto">
-<head>
-    <script src="../static/js/color-modes.js"></script>
-    <title>Login</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sticky-footer-navbar/">
-    <link href="../static/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="../static/css/additional.css" rel="stylesheet">
-    <link href="../static/css/my.css" rel="stylesheet">
-    <link href="../static/css/login.css" rel="stylesheet">
-</head>
-<body class="d-flex flex-column h-100">
+{% extends "layouts/base.html" %}
+{% load static %}
 
-<header>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid" style="height: 85px">
-            <a style="width: 20%; justify-content: center; display: flex;" class="navbar-brand" href="#"><h1>Askme</h1>
-            </a>
-            <div class="collapse navbar-collapse" id="navbarCollapse" style="height: 100%">
-                <form class="d-flex" role="search" style="width: 90%; height: 50%">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                           style="width: 80%; font-size: 20px">
-                    <button class="btn btn-outline-success" type="submit" style="width: 20%">Ask</button>
-                </form>
-            </div>
-            <div id="info-user">
-                <div class="navbar-brand">
-                    <a href="#">log in</a><a href="#">register</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
+{% block info-user %}
+    {% include "layouts/not_authorized_user.html" %}
+{% endblock %}
 
-<!-- Begin page content -->
-<main class="flex-shrink-0">
-    <div class="container" style="max-width: 90%; margin-right: 0; margin-left:10%">
-        <div style="margin-top: 75px; margin-bottom: 20px">
-            <h1 class="mt-5" style="display: inline; margin-right: 30px">Log in</h1>
-        </div>
+{% block first-row %}
+    <h2 class="mt-5">Login</h2>
+{% endblock %}
+
+{% block content %}
+    <div id="address_exists" style="margin-bottom: 10px; color: red">
+        Sorry, wrong password!
+    </div>
+
+    <form class="needs-validation" novalidate="" method="post" action="{% url 'index' %}" name="login">
+        <!--login-->
         <div class="row">
-
-            <!--      колонка с формой авторизации-->
-            <div class="col-9">
-
-                <div id="wrong_password">
-                    Sorry, wrong password!
-                </div>
-
-                <form class="needs-validation" novalidate="" method="post">
-                    <div class="row login">
-                        <div class="col-2">
-                            Login
-                        </div>
-                        <div class="col-5">
-                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
-                        </div>
-                    </div>
-
-                    <div class="row login">
-                        <div class="col-2">
-                            Password
-                        </div>
-                        <div class="col-5">
-                            <input type="password" class="form-control" id="lastName" placeholder="" value=""
-                                   required="">
-                            <button class="btn btn-primary btn-lg login" type="submit">Log in</button>
-                        </div>
-                    </div>
-                  
-                    <hr class="my-3">
-                    <div class="row">
-                        <div class="col-2"></div>
-                        <div class="col-5"><a href="#">create new account</a></div>
-                    </div>
-                </form>
-
-            </div>
-
-            <!-- Tags-->
-            <div class="col-3">
-                <h3 style="justify-content: center; display: flex">Popular tags</h3>
-                <div class="tags-question">
-                    <span class="badge bg-primary">Python</span>
-                    <span class="badge bg-secondary">CSS</span>
-                    <span class="badge bg-success">SQL</span>
-                    <span class="badge bg-danger">Django</span>
-                    <span class="badge bg-dark">VK</span>
-                    <span class="badge bg-warning">perl</span>
-                    <span class="badge bg-info">C++</span>
-                </div>
-                <h3 style="justify-content: center; display: flex; margin-top: 20px">Best members</h3>
-                <a class="members" href="#">Mr. Freeman</a>
-                <a class="members" href="#">Dr. House</a>
-                <a class="members" href="#">Bender</a>
-                <a class="members" href="#">Queen Victoria</a>
-                <a class="members" href="#">V. Pupkin</a>
+            <div class="col-2">Login</div>
+            <div class="col-5">
+                <input class="form-control me-2 question-text" type="text" name="login">
             </div>
         </div>
-    </div>
 
-    </div>
-</main>
+        <div class="row">
+            <div class="col-2">Password</div>
+            <div class="col-5">
+                <input class="form-control me-2 question-text" type="text" name="password">
+                <button class="btn btn-primary btn-lg" type="submit"><font style="vertical-align: inherit;"><font
+                        style="vertical-align: inherit;">Log in</font></font></button>
+            </div>
+        </div>
 
+        <hr class="my-3">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-5"><a href="{% url 'register' %}">Create new account</a></div>
+        </div>
+    </form>
 
-<script src="../static/js/bootstrap.bundle.js" crossorigin="anonymous"></script>
+{% endblock %}
 
-
-</body>
-</html>
 

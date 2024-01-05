@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from .models import get_answers, get_question, get_questions, get_user, question_by_tag
+from .models import get_answers, get_question, get_questions, get_user, question_by_tag, log_in, log_out
 from .models import authorized, TAGS, MEMBERS
 
 def paginate(objects, request, per_page = 10):
@@ -29,14 +29,28 @@ def question(request, id):
     }
     return render(request, 'question.html', context)
 
-def register(request):
-    return render(request, 'register.html')
+def signup(request):
+    context = {
+        "tags": TAGS,
+        "members": MEMBERS,
+    }
+    return render(request, "register.html", context)
 
 def ask(request):
-    return render(request, 'ask.html')
+    context = {
+        "user_data": get_user(authorized.status),
+        "tags": TAGS,
+        "members": MEMBERS,
+    }
+    return render(request, 'ask.html', context)
 
 def login(request):
-    return render(request, 'login.html')
+    log_in()
+    context = {
+        "tags": TAGS,
+        "members": MEMBERS,
+    }
+    return render(request, 'login.html', context)
 
 def settings(request, id):
     user = get_user(id)
@@ -44,16 +58,21 @@ def settings(request, id):
         "user_data": user,
         "user": None,
         "tags": TAGS,
-        "best_members": MEMBERS,
+        "members": MEMBERS,
     }
     return render(request, 'settings.html', context)
 
 
-def tag(request):
+def tag(request, tag):
     context = {
+        "user_data": get_user(authorized.status),
         "page_obj": paginate(question_by_tag(tag), request),
         "tag": tag,
         "tags": TAGS,
-        "best_members": MEMBERS,
+        "members": MEMBERS,
     }
     return render(request, 'tag.html', context)
+
+def logout(request):
+    log_out()
+    return index(request)

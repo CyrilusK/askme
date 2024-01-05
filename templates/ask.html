@@ -1,112 +1,47 @@
-<!DOCTYPE html>
-<html lang="en" class="h-100" data-bs-theme="auto">
-<head>
-    <script src="../static/js/color-modes.js"></script>
-    <title>Ask</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sticky-footer-navbar/">
-    <link href="../static/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="../static/css/additional.css" rel="stylesheet">
-    <link href="../static/css/my.css" rel="stylesheet">
-</head>
-<body class="d-flex flex-column h-100">
+{% extends "layouts/base.html" %}
+{% load static %}
 
+{% block info-user %}
+    {% if user_data %}
+        {% include "layouts/is_authorized_user.html" %}
+    {% else %}
+        {% include "layouts/not_authorized_user.html" %}
+    {% endif %}
+{% endblock %}
 
-<header>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid" style="height: 85px">
-            <a style="width: 20%; justify-content: center; display: flex;" class="navbar-brand" href="#"><h1>Askme</h1>
-            </a>
-            <div class="collapse navbar-collapse" id="navbarCollapse" style="height: 100%">
-                <form class="d-flex" role="search" style="width: 90%; height: 50%">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                           style="width: 80%; font-size: 20px">
-                    <button class="btn btn-outline-success" type="submit" style="width: 20%">Ask</button>
-                </form>
-            </div>
-            <div id="info-user">
-                <div class="navbar-brand">
-                    <a href="#">log in</a><a href="#">register</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
+{% block first-row %}
+    <h2 class="mt-5">New question</h2>
+{% endblock %}
 
-<!-- Begin page content -->
-<main class="flex-shrink-0">
-    <div class="container" style="max-width: 90%; margin-right: 0; margin-left:10%">
-        <div style="margin-top: 75px; margin-bottom: 20px">
-            <h1 class="mt-5" style="display: inline; margin-right: 30px">New question</h1>
-        </div>
+{% block content %}
+    <form method="post" action="{% url 'index' %}" name="ask">
+        <!-- title-->
         <div class="row">
-
-            <!--  Question Form-->
+            <div class="col-2">Title</div>
             <div class="col-9">
-
-
-                <form method="post" action="#">
-                    <!--          title-->
-                    <div class="row">
-                        <div class="col-2">Title</div>
-                        <div class="col-9">
-                            <input class="form-control me-2 question-text" type="search" name="title">
-                        </div>
-                    </div>
-                    <!--          text-->
-                    <div class="row">
-                        <div class="col-2">Text</div>
-                        <div class="col-9">
+                <input class="form-control me-2 question-text" type="search" name="title">
+            </div>
+        </div>
+        <!--text-->
+        <div class="row">
+            <div class="col-2">Text</div>
+            <div class="col-9">
                             <textarea class="form-control me-2 question-text" type="search" rows="15" name="text"
                                       style="resize: none; width: 100%"></textarea>
-                        </div>
-                    </div>
-                    <!--          tags-->
-                    <div class="row">
-                        <div class="col-2">Tags</div>
-                        <div class="col-9">
-                            <input class="form-control me-2 question-text" name="tags" type="search">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2"></div>
-                        <div class="col-9">
-                            <button class="btn btn-outline-success" type="submit">Ask</button>
-                        </div>
-                    </div>
-                </form>
             </div>
-
-
-            <!--Tags-->
-            <div class="col-3">
-                <h3 style="justify-content: center; display: flex">Popular tags</h3>
-                <div class="tags-question">
-                    <span class="badge bg-primary">Python</span>
-                    <span class="badge bg-secondary">CSS</span>
-                    <span class="badge bg-success">SQL</span>
-                    <span class="badge bg-danger">Django</span>
-                    <span class="badge bg-dark">VK</span>
-                    <span class="badge bg-warning">perl</span>
-                    <span class="badge bg-info">C++</span>
-                </div>
-                <h3 style="justify-content: center; display: flex; margin-top: 20px">Best members</h3>
-                <a class="members" href="#">Mr. Freeman</a>
-                <a class="members" href="#">Dr. House</a>
-                <a class="members" href="#">Bender</a>
-                <a class="members" href="#">Queen Victoria</a>
-                <a class="members" href="#">V. Pupkin</a>
-            </div>
-
-
         </div>
-
-    </div>
-</main>
-
-
-<script src="../static/js/bootstrap.bundle.js" crossorigin="anonymous"></script>
-
-
-</body>
-</html>
+        <!--tags-->
+        <div class="row">
+            <div class="col-2">Tags</div>
+            <div class="col-9">
+                <input class="form-control me-2 question-text" name="tags" type="search">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-9">
+                <button class="btn btn-outline-success" type="submit">Ask</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

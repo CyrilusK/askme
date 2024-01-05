@@ -10,15 +10,15 @@
 {% endblock %}
 
 {% block first-row %}
-  <h1 class="mt-5" style="display: inline; margin-right: 30px">New questions</h1>
+  <h3 class="mt-5" style="display: inline; margin-right: 30px">New questions</h3>
   <h3 style="display: inline;"><a href="#" style="text-decoration: none">Hot questions</a></h3>
 {% endblock %}
 
 {% block content %}
     {% for question in page_obj %}
-        {% include 'components/question-item.html' %}
+        {% include 'layouts/question-item.html' %}
     {% endfor %}
 
-    {% include 'components/paginator.html' %}
+    {% include 'layouts/paginator.html' %}
 
 {% endblock %}

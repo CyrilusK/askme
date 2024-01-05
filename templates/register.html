@@ -1,135 +1,74 @@
-<!DOCTYPE html>
-<html lang="en" class="h-100" data-bs-theme="auto">
-<head>
-    <script src="../static/js/color-modes.js"></script>
-    <title>Registration</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sticky-footer-navbar/">
-    <link href="../static/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="../static/css/additional.css" rel="stylesheet">
-    <link href="../static/css/my.css" rel="stylesheet">
+{% extends "layouts/base.html" %}
+{% load static %}
 
-</head>
-<body class="d-flex flex-column h-100">
+{% block info-user %}
+    {% include "layouts/not_authorized_user.html" %}
+{% endblock %}
 
-<header>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid" style="height: 85px">
-            <a style="width: 20%; justify-content: center; display: flex;" class="navbar-brand" href="#"><h1>Askme</h1>
-            </a>
-            <div class="collapse navbar-collapse" id="navbarCollapse" style="height: 100%">
-                <form class="d-flex" role="search" style="width: 90%; height: 50%">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                           style="width: 80%; font-size: 20px">
-                    <button class="btn btn-outline-success" type="submit" style="width: 20%">Ask</button>
-                </form>
-            </div>
-            <div id="info-user">
-                <div class="navbar-brand">
-                    <a href="#">log in</a><a href="#">register</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
+{% block first-row %}
+    <h2 class="mt-5">Registration</h2>
+{% endblock %}
 
-<!-- Begin page content -->
-<main class="flex-shrink-0">
-    <div class="container" style="max-width: 90%; margin-right: 0; margin-left:10%">
-        <div style="margin-top: 75px; margin-bottom: 20px">
-            <h2 class="mt-5">Registration</h2>
-        </div>
-        <div class="row">
-
-            <!--Questions-->
-            <div class="col-9">
-                <div id="address_exists" style="margin-bottom: 10px; color: red">
-                    Sorry, this email address already registred
-                </div>
-                <form method="post" action="#" enctype="multipart/form-data">
-                    <!--login-->
-                    <div class="row">
-                        <div class="col-3">Login</div>
-                        <div class="col-5">
-                            <input class="form-control me-2 question-text" type="text" name="login">
-                        </div>
-                    </div>
-                    <!--email-->
-                    <div class="row">
-                        <div class="col-3">Email</div>
-                        <div class="col-5">
-                            <input class="form-control me-2 question-text" type="email" name="email">
-                        </div>
-                    </div>
-                    <!-- nickname-->
-                    <div class="row">
-                        <div class="col-3">NickName</div>
-                        <div class="col-5">
-                            <input class="form-control me-2 question-text" type="text" name="nickname">
-                        </div>
-                    </div>
-
-                    <!--password-->
-                    <div class="row">
-                        <div class="col-3">Password</div>
-                        <div class="col-5">
-                            <input class="form-control me-2 question-text" type="password" name="password">
-                        </div>
-                    </div>
-
-                    <!--          repeat password-->
-                    <div class="row">
-                        <div class="col-3">Repeat password</div>
-                        <div class="col-5">
-                            <input class="form-control me-2 question-text" type="password" name="repeat_password">
-                        </div>
-                    </div>
-
-
-                    <!--upload avatar-->
-                    <div class="row">
-                        <div class="col-3">Upload avatar</div>
-                        <div class="col-5">
-                            <input style="display: block" type="file" name="avatar">
-                        </div>
-                    </div>
-
-
-                    <div class="row" style="margin-top: 20px">
-                        <div class="col-3"></div>
-                        <div class="col-5">
-                            <button class="btn btn-outline-success" type="submit">Register</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Tags-->
-            <div class="col-3">
-                <h3 style="justify-content: center; display: flex">Popular tags</h3>
-                <div class="tags-question">
-                    <span class="badge bg-primary">Python</span>
-                    <span class="badge bg-secondary">CSS</span>
-                    <span class="badge bg-success">SQL</span>
-                    <span class="badge bg-danger">Django</span>
-                    <span class="badge bg-dark">VK</span>
-                    <span class="badge bg-warning">perl</span>
-                    <span class="badge bg-info">C++</span>
-                </div>
-                <h3 style="justify-content: center; display: flex; margin-top: 20px">Best members</h3>
-                <a class="members" href="#">Mr. Freeman</a>
-                <a class="members" href="#">Dr. House</a>
-                <a class="members" href="#">Bender</a>
-                <a class="members" href="#">Queen Victoria</a>
-                <a class="members" href="#">V. Pupkin</a>
-            </div>
-        </div>
+{% block content %}
+    <div id="address_exists" style="margin-bottom: 10px; color: red">
+        Sorry, this email address already registred
     </div>
-</main>
+
+    <form method="post" action="{% url 'index' %}" enctype="multipart/form-data" name="register">
+        <!--логин-->
+        <div class="row">
+            <div class="col-3">Login</div>
+            <div class="col-5">
+                <input class="form-control me-2 question-text" type="text" name="login">
+            </div>
+        </div>
+        <!--емейл-->
+        <div class="row">
+            <div class="col-3">Email</div>
+            <div class="col-5">
+                <input class="form-control me-2 question-text" type="email" name="email">
+            </div>
+        </div>
+        <!--никнейм-->
+        <div class="row">
+            <div class="col-3">NickName</div>
+            <div class="col-5">
+                <input class="form-control me-2 question-text" type="text" name="nickname">
+            </div>
+        </div>
+
+        <!--пароль-->
+        <div class="row">
+            <div class="col-3">Password</div>
+            <div class="col-5">
+                <input class="form-control me-2 question-text" type="password" name="password">
+            </div>
+        </div>
+
+        <!--повторный пароль-->
+        <div class="row">
+            <div class="col-3">Repeat password</div>
+            <div class="col-5">
+                <input class="form-control me-2 question-text" type="password" name="repeat_password">
+            </div>
+        </div>
 
 
-<script src="../static/js/bootstrap.bundle.js" crossorigin="anonymous"></script>
+        <!--загрузка аватарки-->
+        <div class="row">
+            <div class="col-3">Upload avatar</div>
+            <div class="col-5">
+                <input style="display: block" type="file" name="avatar">
+            </div>
+        </div>
 
 
-</body>
-</html>
+        <div class="row" style="margin-top: 20px">
+            <div class="col-3"></div>
+            <div class="col-5">
+                <button class="btn btn-outline-success" type="submit">Register</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

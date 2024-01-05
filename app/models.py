@@ -32,10 +32,10 @@ class Answer:
 class authorized:
     status = True
 
-def logout():
+def log_out():
     authorized.status = False
 
-def login():
+def log_in():
     authorized.status = True
 
 randomData = Faker()
@@ -67,7 +67,6 @@ def get_answers(question_id):
     for answer in ANSWERS:
         if answer.question.id == question_id:
             res.append(answer)
-            print(res)
     return res
 
 for i in range(NUM_QUESTIONS):
@@ -86,6 +85,6 @@ def get_user(status):
 def question_by_tag(tag):
     res = []
     for question in QUESTIONS:
-        if tag == question.tags:
+        if tag in question.tags:
             res.append(question)
     return res
