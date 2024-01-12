@@ -1,4 +1,4 @@
-{% extends 'layouts/base.html' %}
+{% extends "layouts/base.html" %}
 {% load static %}
 
 {% block info-user %}
@@ -10,15 +10,14 @@
 {% endblock %}
 
 {% block first-row %}
-  <h3 class="mt-5" style="display: inline; margin-right: 30px">New questions</h3>
-  <h3 style="display: inline;"><a href="{% url 'hot' %}" style="text-decoration: none">Hot questions</a></h3>
+    <h3 class="mt-5">Hot questions</h3>
 {% endblock %}
 
 {% block content %}
     {% for question in page_obj %}
-        {% include 'layouts/question-item.html' %}
+        {% include "layouts/question-item.html" %}
     {% endfor %}
 
-    {% include 'layouts/paginator.html' %}
+    {% include "layouts/paginator.html" %}
 
 {% endblock %}

@@ -1,90 +1,111 @@
 from django.db import models
-from random import choice, randint
-from faker import Faker
+from django.db.models import Manager, Count
+from django.contrib.auth.models import User
+from random import choice
 
+class ProfileManager(Manager):
+    def best(self):
+        return Profile.objects.annotate(count_question=Count("questions")).order_by("-count_question")[:10]
 
-# Create your models here.
-class User:
-    def __init__(self, id, avatar, name):
-        self.id = id
-        self.avatar = avatar
-        self.name = name
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.PROTECT, related_name="profile")
+    avatar = models.ImageField(upload_to="static/img", default="static/img/user1.jpg")
 
-class Question:
-    def __init__(self, id, author, title, text, num_likes, num_answers, tags):
-        self.id = id
-        self.author = author
-        self.title = title
-        self.text = text
-        self.num_likes = num_likes
-        self.num_answers = num_answers
-        self.tags = tags
+    def __str__(self):
+        return f"{self.user.username[-1]} {self.user.first_name} {self.user.last_name} {self.id=}"
 
-class Answer:
-    def __init__(self, id, author, question, text, correct, num_likes):
-        self.id = id
-        self.author = author
-        self.question = question
-        self.text = text
-        self.correct = correct
-        self.num_likes = num_likes
+    objects = ProfileManager()
+
+class Tag(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+class Like(models.Model):
+    from_whom = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="likes")
+    question = models.ForeignKey("Question", on_delete=models.PROTECT, blank=True, null=True, related_name="likes")
+    answer = models.ForeignKey("Answer", on_delete=models.PROTECT, blank=True, null=True, related_name="likes")
+    date = models.DateTimeField(auto_now_add=True)
+    choice = [
+        ("+", "like"),
+        ("-", "dislike"),
+    ]
+    event = models.CharField(max_length=1, choices=choice)
+
+    class Meta:
+        unique_together = [('from_whom', 'question'), ('from_whom', 'answer')]
+
+    def __str__(self):
+        return f"{dict(self.choice)[self.event]} from {self.from_whom.user.username} to \
+            {'Q'+str(self.question) if self.question is not None else 'A' + str(self.answer)}"
+
+class QuestionManager(Manager):
+    def get_by_id(self, id: int):
+        return Question.objects.get(id=id)
+    def get_questions_all(self):
+        return Question.objects.order_by("-date")
+
+    def by_tag(self, tag_name: str):
+        return Tag.objects.get(name=tag_name).questions.all().order_by("-date")
+
+    def hot_questions(self):
+        return self.annotate(count_likes=Count("likes")).order_by("-count_likes", "-date")
+
+class Question(models.Model):
+    author = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="questions")
+    title = models.CharField(max_length=50)
+    text = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    tags = models.ManyToManyField("Tag", related_name="questions")
+
+    objects = QuestionManager()
+
+    def __str__(self):
+        return f"{self.title} from {self.author.user.username} {self.id=}"
+
+    def num_likes(self):
+        return len(self.likes.filter(event="+"))
+
+    def num_dislikes(self):
+        return -len(self.likes.filter(event="-"))
+
+    def num_answers(self):
+        return len(self.answers.all())
+
+class AnswerManager(Manager):
+    def answers_to_question(self, question):
+        return Question.objects.get(id=question).answers.order_by("-date")
+
+class Answer(models.Model):
+    author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="answers")
+    question = models.ForeignKey("Question", on_delete=models.CASCADE, related_name="answers")
+    text = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    correct = models.BooleanField(default=False)
+
+    objects = AnswerManager()
+
+    def __str__(self):
+        return f"{self.author.user.username} {self.id=}"
+
+    def num_likes(self):
+        return len(self.likes.filter(event="+"))
+
+    def num_dislikes(self):
+        return -len(self.likes.filter(event="-"))
 
 class authorized:
     status = True
+    user = None
 
 def log_out():
     authorized.status = False
+    authorized.user = None
 
 def log_in():
     authorized.status = True
+    authorized.user = choice(Profile.objects.all())
 
-randomData = Faker()
-
-NUM_USERS = 6
-NUM_QUESTIONS = 50
-NUM_ANSWERS = 30
-PICTURES = ["img/user1.jpeg", "img/user2.jpeg", "img/user3.png", "img/user4.png", "img/user5.jpeg",
-            "img/user6.jpeg", "img/user7.jpeg"]
-TAGS = [randomData.word() for _ in range(7)]
-MEMBERS = [randomData.name() for _ in range(7)]
-USERS = [User(i, choice(PICTURES), randomData.name()) for i in range(NUM_USERS)]
-QUESTIONS = [Question(i, choice(USERS), f'Question{i}', randomData.text(), randint(-100, 100),
-                      0, [choice(TAGS) for _ in range(randint(1,6))])
-             for i in range(NUM_QUESTIONS)]
-ANSWERS = [Answer(i, choice(USERS), choice(QUESTIONS), randomData.text(), choice([True, False]),
-                  randint(-50, 100)) for i in range(NUM_ANSWERS)]
-
-def get_questions():
-    return QUESTIONS
-
-def get_question(id):
-    for question in QUESTIONS:
-        if question.id == id:
-            return question
-
-def get_answers(question_id):
-    res = []
-    for answer in ANSWERS:
-        if answer.question.id == question_id:
-            res.append(answer)
-    return res
-
-for i in range(NUM_QUESTIONS):
-    QUESTIONS[i].num_answers = len(get_answers(QUESTIONS[i].id))
-
-def get_user(status):
-    if status is False:
-        return None
-    elif status is True:
-        return USERS[randint(0, NUM_USERS - 1)]
-    status = int(status)
-    if status < 0 or status >= len(USERS):
-        return None
-    return USERS[int(status)]
-
-def question_by_tag(tag):
-    res = []
-    for question in QUESTIONS:
-        if tag in question.tags:
-            res.append(question)
-    return res
+def get_user():
+    return authorized.user

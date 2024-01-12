@@ -27,5 +27,7 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('settings/<str:id>', views.settings, name='settings'),
     path('tag/<str:tag>/', views.tag, name='tag'),
+    path("hot/", views.hot, name="hot"),
+    path("best/<int:id>", views.best_users, name="best"),
     path('admin/', admin.site.urls),
 ]

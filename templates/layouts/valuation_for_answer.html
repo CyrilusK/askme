@@ -1,0 +1,10 @@
+{% load static %}
+
+<div class="div-valuation">
+    <button class="button-like"><img src="{% static '/img/like.png' %}" style="width: 15px; height: 15px;" alt=""></button>
+    <span>{{ answer.num_likes }}</span>
+    <button class="button-like"><img src="{% static '/img/dislike.png' %}"
+                 style="width: 15px; height: 15px;" alt="">
+    </button>
+    <span>{{ answer.num_dislikes }}</span>
+</div>

@@ -5,24 +5,19 @@
     <div class="row">
         <div class="col-3">
             <div class="question-avatar">
-                <img src="{% static answer.author.avatar %}" alt="avatar">
+                <img src="{{ answer.author.avatar.url }}" alt="avatar">
             </div>
-            <div class="div-like">
-                <button><img src="{% static '/img/arrow.png' %}" style="width: 10px; height: 10px;" alt=""></button>
-                <button class="button-like"><img src="{% static 'img/like.svg' %}"></button>
-                <span>{{ answer.num_likes }}</span>
-                <button><img src="{% static '/img/arrow.png' %}"
-                             style="width: 10px; height: 10px; rotate: 180deg;" alt="">
-                </button>
-            </div>
+            {% include "layouts/valuation_for_answer.html" %}
+
         </div>
         <div class="col-8">
             <div style="min-height: 140px">
-                 {{ answer.text }}
+                {{ answer.text }}
             </div>
             <div class="row">
                 <label>
-                    <input class="correct" type="checkbox" name="correct" value="true" {% if answer.correct %} checked {% endif %}>
+                    <input class="correct" type="checkbox" name="correct" value="true" {% if answer.correct %}
+                           checked {% endif %}>
                     Correct
                 </label>
             </div>
