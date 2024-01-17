@@ -50,7 +50,7 @@ class QuestionManager(Manager):
         return Tag.objects.get(name=tag_name).questions.all().order_by("-date")
 
     def hot_questions(self):
-        return self.annotate(count_likes=Count("likes")).order_by("-count_likes", "-date")
+        return self.annotate(count_answers=Count("answers")).order_by("-count_answers")
 
 class Question(models.Model):
     author = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="questions")
@@ -68,7 +68,7 @@ class Question(models.Model):
         return len(self.likes.filter(event="+"))
 
     def num_dislikes(self):
-        return -len(self.likes.filter(event="-"))
+        return len(self.likes.filter(event="-"))
 
     def num_answers(self):
         return len(self.answers.all())
@@ -93,7 +93,7 @@ class Answer(models.Model):
         return len(self.likes.filter(event="+"))
 
     def num_dislikes(self):
-        return -len(self.likes.filter(event="-"))
+        return len(self.likes.filter(event="-"))
 
 class authorized:
     status = True
