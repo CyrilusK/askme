@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models import Manager, Count
 from django.contrib.auth.models import User
-from random import choice
 
 class ProfileManager(Manager):
     def best(self):
@@ -15,6 +14,8 @@ class Profile(models.Model):
         return f"{self.user.username[-1]} {self.user.first_name} {self.user.last_name} {self.id=}"
 
     objects = ProfileManager()
+
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=20, unique=True)
@@ -75,7 +76,7 @@ class Question(models.Model):
 
 class AnswerManager(Manager):
     def answers_to_question(self, question):
-        return Question.objects.get(id=question).answers.order_by("-date")
+        return Question.objects.get(id=question).answers
 
 class Answer(models.Model):
     author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="answers")
@@ -94,18 +95,3 @@ class Answer(models.Model):
 
     def num_dislikes(self):
         return len(self.likes.filter(event="-"))
-
-class authorized:
-    status = True
-    user = None
-
-def log_out():
-    authorized.status = False
-    authorized.user = None
-
-def log_in():
-    authorized.status = True
-    authorized.user = choice(Profile.objects.all())
-
-def get_user():
-    return authorized.user
