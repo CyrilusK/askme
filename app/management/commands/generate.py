@@ -21,7 +21,7 @@ def fill(ratio):
     Count.set_values(ratio)
     gen = Faker()
     avatars = ["1.jpeg", "2.jpeg", "3.png", "4.png", "5.jpeg", "6.jpeg", "7.jpeg"]
-    avatars = [f"static/img/user{avatar}" for avatar in avatars]
+    avatars = [f"/user{avatar}" for avatar in avatars]
 
     # TAG
     last_tag = Tag.objects.only("id").order_by("-id")

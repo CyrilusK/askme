@@ -7,6 +7,9 @@ from django.contrib import auth
 from django.urls import reverse
 from .forms import LoginForm, RegisterForm, ProfileEditForm, QuestionForm, AnswerForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods, require_POST
+# from pkg.ajax import login_required_ajax, HttpResponseAjax, HttpResponseAjaxError
+from django.db import transaction
 
 
 def paginate(objects, request, per_page = 10):
@@ -25,16 +28,21 @@ def index(request):
     }
     if request.user.is_authenticated:
         context["user_data"] = request.user
+        context["likes_question"] = request.user.profile.likes_question()
+        context["dislikes_question"] = request.user.profile.dislikes_question()
     return render(request, 'base.html', context)
 
-def question(request, id):
+@require_http_methods(["GET", "POST"])
+def question(request, id: int):
     try:
         question = Question.objects.get_by_id(id=id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
     if request.method == "GET":
         answer_form = AnswerForm()
-    elif request.method == "POST":
+    else:
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("login") + f"?continue={reverse('question', args=[id])}%23answer-form")
         answer_form = AnswerForm(request.POST)
         if answer_form.is_valid():
             answer_id = answer_form.save(request.user, question)
@@ -54,12 +62,18 @@ def question(request, id):
     }
     if request.user.is_authenticated:
         context["user_data"] = request.user
+        context["likes_question"] = [id] if request.user.profile.is_liked_question(id) else None
+        context["dislikes_question"] = [id] if context["likes_question"] is None and \
+                                               request.user.profile.is_disliked_question(id) else None
+        context["likes_answer"] = request.user.profile.likes_answer()
+        context["dislikes_answer"] = request.user.profile.dislikes_answer()
     return render(request, 'question.html', context)
 
+@require_http_methods(["GET", "POST"])
 def signup(request):
     if request.method == "GET":
         register_form = RegisterForm()
-    elif request.method == "POST":
+    else:
         register_form = RegisterForm(request.POST, request.FILES)
         if register_form.is_valid():
             register_form.save()
@@ -71,10 +85,11 @@ def signup(request):
     return render(request, "register.html", context)
 
 @login_required(login_url="login", redirect_field_name="continue")
+@require_http_methods(["GET", "POST"])
 def ask(request):
     if request.method == "GET":
         question_form = QuestionForm()
-    elif request.method == "POST":
+    else:
         question_form = QuestionForm(request.POST)
         if question_form.is_valid():
             question_id = question_form.save(request.user)
@@ -119,15 +134,14 @@ def login(request):
     return render(request, "login.html", context)
 
 @login_required(login_url="login", redirect_field_name="continue")
+@require_http_methods(["GET", "POST"])
 def settings(request):
     if request.method == "GET":
-        setting_form = ProfileEditForm(request.user.id, initial=dict(upload_avatar=request.user.profile.avatar,
-                                                                     username=request.user.username,
-                                                                     first_name=request.user.first_name,
-                                                                     last_name=request.user.last_name,
-                                                                     email=request.user.email))
-    elif request.method == "POST":
-        setting_form = ProfileEditForm(request.user.id, request.POST, request.FILES)
+        setting_form = ProfileEditForm(initial=dict(upload_avatar=request.user.profile.avatar,
+                                                    username=request.user.username, first_name=request.user.first_name,
+                                                    last_name=request.user.last_name, email=request.user.email))
+    else:
+        setting_form = ProfileEditForm(request.POST, request.FILES, instance=request.user)
         if setting_form.is_valid():
             setting_form.save()
             return HttpResponseRedirect(reverse("settings"))
@@ -155,6 +169,8 @@ def tag(request, tag):
                }
     if request.user.is_authenticated:
         context["user_data"] = request.user
+        context["likes_question"] = request.user.profile.likes_question()
+        context["dislikes_question"] = request.user.profile.dislikes_question()
     return render(request, "tag.html", context)
 
 def logout(request):
@@ -170,6 +186,8 @@ def hot(request):
                }
     if request.user.is_authenticated:
         context["user_data"] = request.user
+        context["likes_question"] = request.user.profile.likes_question()
+        context["dislikes_question"] = request.user.profile.dislikes_question()
     return render(request, "hot.html", context)
 
 def best_users(request, id):
@@ -186,4 +204,6 @@ def best_users(request, id):
                }
     if request.user.is_authenticated:
         context["user_data"] = request.user
+        context["likes_question"] = request.user.profile.likes_question()
+        context["dislikes_question"] = request.user.profile.dislikes_question()
     return render(request, "base.html", context)

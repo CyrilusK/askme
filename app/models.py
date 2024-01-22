@@ -8,13 +8,30 @@ class ProfileManager(Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, related_name="profile")
-    avatar = models.ImageField(upload_to="static/img", default="static/img/user1.jpg")
+    avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", default="user1.jpg")
 
     def __str__(self):
         return f"{self.user.username[-1]} {self.user.first_name} {self.user.last_name} {self.id=}"
 
     objects = ProfileManager()
 
+    def likes_question(self):
+        return self.likes.list_id_vote("question", "+")
+
+    def dislikes_question(self):
+        return self.likes.list_id_vote("question", "-")
+
+    def likes_answer(self):
+        return self.likes.list_id_vote("answer", "+")
+
+    def dislikes_answer(self):
+        return self.likes.list_id_vote("answer", "-")
+
+    def is_liked_question(self, id: int):
+        return len(self.likes.filter(question_id=id, event="+")) != 0
+
+    def is_disliked_question(self, id: int):
+        return len(self.likes.filter(question_id=id, event="-")) != 0
 
 
 class Tag(models.Model):
@@ -22,6 +39,28 @@ class Tag(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+class LikeManager(Manager):
+    def update_vote(self, profile, obj, vote):
+        object_type = "question" if isinstance(obj, Question) else "answer"
+        like = self.filter(**{object_type: obj})
+        if len(like) == 0:
+            Like(from_whom=profile, event=vote, **{object_type: obj}).save()
+            if vote == "+":
+                return "like"
+            return "dislike"
+        elif like[0].event == vote:
+            like[0].delete()
+            return None
+        else:
+            like[0].event = vote
+            like[0].save()
+            if vote == "+":
+                return "like"
+            return "dislike"
+
+    def list_id_vote(self, obj_name, vote):
+        return self.exclude(**{obj_name: None}).filter(event=vote).values_list(obj_name+"_id", flat=True)
 
 class Like(models.Model):
     from_whom = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="likes")
@@ -33,6 +72,7 @@ class Like(models.Model):
         ("-", "dislike"),
     ]
     event = models.CharField(max_length=1, choices=choice)
+    objects = LikeManager()
 
     class Meta:
         unique_together = [('from_whom', 'question'), ('from_whom', 'answer')]
@@ -95,3 +135,7 @@ class Answer(models.Model):
 
     def num_dislikes(self):
         return len(self.likes.filter(event="-"))
+
+    def update_correct(self):
+        self.correct = not self.correct
+        self.save()
